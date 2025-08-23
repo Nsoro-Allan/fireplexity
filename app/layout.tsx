@@ -5,6 +5,9 @@ import { Toaster } from 'sonner'
 export const metadata: Metadata = {
   title: "Fireplexity v2 - AI-Powered Multi-Source Search",
   description: "Advanced search with AI-powered insights, news, images, and real-time information",
+  icons: {
+    icon: "/firecrawl-logo.ico",
+  },
 };
 
 export default function RootLayout({
