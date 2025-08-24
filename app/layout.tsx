@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from 'sonner'
+import { ThemeProvider } from '@/components/theme-provider'
 
 export const metadata: Metadata = {
   title: "Fireplexity.",
@@ -16,10 +17,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="font-sans antialiased">
-        {children}
-        <Toaster position="bottom-right" />
+    <html lang="en" suppressHydrationWarning>
+      <body className="font-sans antialiased transition-colors duration-300">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          {children}
+          <Toaster position="bottom-right" />
+        </ThemeProvider>
       </body>
     </html>
   );

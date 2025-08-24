@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
-import { ErrorDisplay } from '@/components/error-display'
+import { ThemeToggleAdvanced } from '@/components/theme-toggle-advanced'
 
 interface MessageData {
   sources: SearchResult[]
@@ -52,14 +52,14 @@ export default function FireplexityPage() {
       body: firecrawlApiKey ? { firecrawlApiKey } : undefined
     })
   })
-  
+
   // Single consolidated effect for handling streaming data
   useEffect(() => {
     // Handle response start
     if (status === 'streaming' && messages.length > 0) {
       const assistantMessages = messages.filter(m => m.role === 'assistant')
       const newIndex = assistantMessages.length
-      
+
       // Only clear if we're starting a new message
       if (newIndex !== currentMessageIndex.current) {
         setSearchStatus('')
@@ -72,17 +72,17 @@ export default function FireplexityPage() {
         lastDataLength.current = 0  // Reset data tracking for new message
       }
     }
-    
+
     // Handle data parts from messages
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1]
       if (!lastMessage.parts || lastMessage.parts.length === 0) return
-      
+
       // Check if we've already processed this data
       const partsLength = lastMessage.parts.length
       if (partsLength === lastDataLength.current) return
       lastDataLength.current = partsLength
-      
+
       // Process ALL parts to accumulate data
       let hasSourceData = false
       let latestSources: SearchResult[] = []
@@ -91,7 +91,7 @@ export default function FireplexityPage() {
       let latestTicker: string | null = null
       let latestFollowUpQuestions: string[] = []
       let latestStatus: string | null = null
-      
+
       lastMessage.parts.forEach((part: any) => {
         // Handle different data part types
         if (part.type === 'data-sources' && part.data) {
@@ -101,20 +101,20 @@ export default function FireplexityPage() {
           if (part.data.newsResults) latestNewsResults = part.data.newsResults
           if (part.data.imageResults) latestImageResults = part.data.imageResults
         }
-        
+
         if (part.type === 'data-ticker' && part.data) {
           latestTicker = part.data.symbol
         }
-        
+
         if (part.type === 'data-followup' && part.data && part.data.questions) {
           latestFollowUpQuestions = part.data.questions
         }
-        
+
         if (part.type === 'data-status' && part.data) {
           latestStatus = part.data.message || ''
         }
       })
-      
+
       // Apply updates
       if (hasSourceData) {
         setSources(latestSources)
@@ -124,7 +124,7 @@ export default function FireplexityPage() {
       if (latestTicker !== null) setCurrentTicker(latestTicker)
       if (latestFollowUpQuestions.length > 0) setFollowUpQuestions(latestFollowUpQuestions)
       if (latestStatus !== null) setSearchStatus(latestStatus)
-      
+
       // Update message data map
       if (hasSourceData || latestTicker !== null || latestFollowUpQuestions.length > 0) {
         setMessageData(prevMap => {
@@ -132,7 +132,7 @@ export default function FireplexityPage() {
           const existingData = newMap.get(currentMessageIndex.current) || { sources: [], followUpQuestions: [] }
           newMap.set(currentMessageIndex.current, {
             ...existingData,
-            ...(hasSourceData && { 
+            ...(hasSourceData && {
               sources: latestSources,
               newsResults: latestNewsResults,
               imageResults: latestImageResults
@@ -152,7 +152,7 @@ export default function FireplexityPage() {
       try {
         const response = await fetch('/api/fireplexity/check-env')
         const data = await response.json()
-        
+
         if (data.hasFirecrawlKey) {
           setHasApiKey(true)
         } else {
@@ -169,7 +169,7 @@ export default function FireplexityPage() {
         setIsCheckingEnv(false)
       }
     }
-    
+
     checkApiKey()
   }, [])
 
@@ -179,7 +179,7 @@ export default function FireplexityPage() {
       setHasApiKey(true)
       setShowApiKeyModal(false)
       toast.success('API key saved successfully!')
-      
+
       // If there's a pending query, submit it
       if (pendingQuery) {
         sendMessage({ text: pendingQuery })
@@ -191,33 +191,33 @@ export default function FireplexityPage() {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!input.trim()) return
-    
+
     // Check if we have an API key
     if (!hasApiKey) {
       setPendingQuery(input)
       setShowApiKeyModal(true)
       return
     }
-    
+
     setHasSearched(true)
     // Don't clear data here - wait for new data to arrive
     // This prevents layout jump
     sendMessage({ text: input })
     setInput('')
   }
-  
+
   // Wrapped submit handler for chat interface
   const handleChatSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!input.trim()) return
-    
+
     // Check if we have an API key
     if (!hasApiKey) {
       setPendingQuery(input)
       setShowApiKeyModal(true)
       return
     }
-    
+
     // Store current data in messageData before new query
     if (messages.length > 0 && sources.length > 0) {
       const assistantMessages = messages.filter(m => m.role === 'assistant')
@@ -234,7 +234,7 @@ export default function FireplexityPage() {
         setMessageData(newMap)
       }
     }
-    
+
     // Don't clear data here - wait for new data to arrive
     // The useEffect will clear when it detects a new assistant message starting
     sendMessage({ text: input })
@@ -254,10 +254,10 @@ export default function FireplexityPage() {
             rel="noopener noreferrer"
             className="flex items-center"
           >
-            <Image 
-              src="/firecrawl-logo.svg" 
-              alt="Firecrawl Logo" 
-              width={90} 
+            <Image
+              src="/firecrawl-logo.svg"
+              alt="Firecrawl Logo"
+              width={90}
               height={24}
               className="h-6 w-auto"
             />
@@ -265,6 +265,9 @@ export default function FireplexityPage() {
               Fireplexity.
             </span>
           </Link>
+
+          {/* Theme Toggle */}
+          <ThemeToggleAdvanced />
         </div>
       </header>
 
@@ -280,7 +283,7 @@ export default function FireplexityPage() {
             </span>
           </h1>
           <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
-            Multi-source search with AI-powered insights, news, and images
+            Multi-source search with AI-powered insights, news, and images.
           </p>
         </div>
       </div>
@@ -289,14 +292,14 @@ export default function FireplexityPage() {
       <div className="flex-1 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto h-full">
           {!isChatActive ? (
-            <SearchComponent 
+            <SearchComponent
               handleSubmit={handleSearch}
               input={input}
               handleInputChange={(e) => setInput(e.target.value)}
               isLoading={status === 'streaming'}
             />
           ) : (
-            <ChatInterface 
+            <ChatInterface
               messages={messages}
               sources={sources}
               newsResults={newsResults}
@@ -314,7 +317,7 @@ export default function FireplexityPage() {
         </div>
       </div>
 
-      
+
       {/* API Key Modal */}
       <Dialog open={showApiKeyModal} onOpenChange={setShowApiKeyModal}>
         <DialogContent>
@@ -322,9 +325,9 @@ export default function FireplexityPage() {
             <DialogTitle>Firecrawl API Key Required</DialogTitle>
             <DialogDescription>
               To use Fireplexity search, you need a Firecrawl API key. Get one for free at{' '}
-              <a 
-                href="https://www.firecrawl.dev" 
-                target="_blank" 
+              <a
+                href="https://www.firecrawl.dev"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-orange-600 hover:text-orange-700 underline"
               >
