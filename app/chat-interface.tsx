@@ -13,6 +13,7 @@ import { MarkdownRenderer } from './markdown-renderer'
 import { StockChart } from './stock-chart'
 import { NewsResults } from './news-results'
 import { ImageResults } from './image-results'
+import { ContentSkeleton } from '@/components/content-skeleton'
 
 interface MessageData {
   sources: SearchResult[]
@@ -135,15 +136,15 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
 
 
   return (
-    <div className="flex h-full relative" style={{ height: 'calc(100vh - 80px)' }}>
+    <div className="flex h-full relative overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
       {/* Main content area */}
-      <div className="flex-1 flex flex-col relative">
+      <div className="flex-1 flex flex-col relative overflow-hidden">
         {/* Top gradient overlay - removed */}
 
         {/* Scrollable content */}
         <div
           ref={scrollContainerRef}
-          className="flex-1 overflow-y-auto pb-36 sm:pb-32 pt-8 scroll-smooth relative scrollbar-hide"
+          className="flex-1 overflow-y-auto pb-36 sm:pb-32 pt-4 sm:pt-8 scroll-smooth relative scrollbar-hide"
           style={{
             scrollBehavior: 'smooth',
             overscrollBehavior: 'contain',
@@ -151,7 +152,7 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
             isolation: 'isolate'
           } as React.CSSProperties}
         >
-          <div className="max-w-4xl mx-auto space-y-6 pb-8">
+          <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6 pb-8 px-4 sm:px-6 lg:px-0 overflow-hidden">
             {/* Previous conversations */}
             {messages.length > 2 && (
               <>
@@ -177,7 +178,7 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                       {/* User message */}
                       {pair.user && (
                         <div>
-                          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{getMessageContent(pair.user)}</h2>
+                          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 break-words overflow-hidden">{getMessageContent(pair.user)}</h2>
                         </div>
                       )}
                       {pair.assistant && (
@@ -187,8 +188,8 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                             <div>
                               <div className="flex items-center justify-between mb-3">
                                 <div className="flex items-center gap-2">
-                                  <FileText className="h-4 w-4 text-black dark:text-white" />
-                                  <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300">Sources</h2>
+                                  <Search className="h-4 w-4 text-black dark:text-white" />
+                                  <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300">Search Results</h2>
                                 </div>
                                 {messageSources.length > 5 && (
                                   <div className="flex items-center gap-1">
@@ -219,14 +220,14 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                                   </div>
                                 )}
                               </div>
-                              <div className="grid grid-cols-5 gap-2">
+                              <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 w-full">
                                 {messageSources.slice(0, 5).map((result, idx) => (
                                   <a
                                     key={idx}
                                     href={result.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md h-28"
+                                    className="group relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md h-24 sm:h-28 w-full min-w-0"
                                   >
                                     {/* Background image */}
                                     {result.image && (
@@ -271,13 +272,13 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                                             </svg>
                                           )}
                                         </div>
-                                        <p className="text-[10px] text-gray-600 dark:text-gray-300 truncate flex-1 font-medium">
+                                        <p className="text-[10px] text-gray-600 dark:text-gray-300 truncate flex-1 font-medium min-w-0">
                                           {result.siteName || new URL(result.url).hostname.replace('www.', '')}
                                         </p>
                                       </div>
 
                                       {/* Title */}
-                                      <h3 className="font-medium text-xs text-gray-900 dark:text-white line-clamp-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 leading-tight">
+                                      <h3 className="font-medium text-xs text-gray-900 dark:text-white line-clamp-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 leading-tight break-words overflow-hidden">
                                         {result.title}
                                       </h3>
 
@@ -328,6 +329,7 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                               <MarkdownRenderer
                                 content={pair.assistant ? getMessageContent(pair.assistant) : ''}
                                 sources={messageSources}
+                                enableTypewriter={false}
                               />
                             </div>
                           </div>
@@ -344,11 +346,11 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                                   <button
                                     key={qIndex}
                                     onClick={() => handleFollowUpClick(question)}
-                                    className="w-full text-left p-2 bg-white dark:bg-zinc-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md group"
+                                    className="w-full text-left p-3 sm:p-2 bg-white dark:bg-zinc-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md group transition-all duration-200"
                                   >
                                     <div className="flex items-start gap-2">
                                       <Plus className="h-4 w-4 text-gray-400 group-hover:text-orange-500 flex-shrink-0 mt-0.5" />
-                                      <span className="text-sm text-gray-700 dark:text-gray-300 group-hover:text-orange-600 dark:group-hover:text-orange-400 break-words">
+                                      <span className="text-sm sm:text-sm text-gray-700 dark:text-gray-300 group-hover:text-orange-600 dark:group-hover:text-orange-400 break-words leading-relaxed">
                                         {question}
                                       </span>
                                     </div>
@@ -369,7 +371,7 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
             {/* Current Query display */}
             {query && (messages.length <= 2 || messages[messages.length - 1]?.role === 'user' || messages[messages.length - 1]?.role === 'assistant') && (
               <div className="opacity-0 animate-fade-up [animation-duration:500ms] [animation-fill-mode:forwards]">
-                <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">{query}</h1>
+                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 break-words overflow-hidden">{query}</h1>
               </div>
             )}
 
@@ -383,6 +385,16 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
               </div>
             )}
 
+            {/* Skeleton loader when waiting for response */}
+            {isWaitingForResponse && !searchStatus && sources.length === 0 && (
+              <ContentSkeleton
+                showSources={true}
+                showAnswer={true}
+                showImages={false}
+                showNews={false}
+              />
+            )}
+
             {/* Sources, Images & News - Animated in first */}
             {(sources.length > 0 || imageResults.length > 0 || newsResults.length > 0) && !isWaitingForResponse && (
               <div className="opacity-0 animate-fade-up [animation-duration:500ms] [animation-delay:200ms] [animation-fill-mode:forwards] space-y-4">
@@ -391,8 +403,8 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                   <div>
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-black dark:text-white" />
-                        <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300">Sources</h2>
+                        <Search className="h-4 w-4 text-black dark:text-white" />
+                        <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300">Search Results</h2>
                       </div>
                       {sources.length > 5 && (
                         <div className="flex items-center gap-1">
@@ -423,14 +435,14 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                         </div>
                       )}
                     </div>
-                    <div className="grid grid-cols-5 gap-2">
+                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 w-full">
                       {sources.slice(0, 5).map((result, index) => (
                         <a
                           key={index}
                           href={result.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md h-28"
+                          className="group relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md h-24 sm:h-28 w-full min-w-0"
                         >
                           {/* Background image */}
                           {result.image && (
@@ -475,13 +487,13 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                                   </svg>
                                 )}
                               </div>
-                              <p className="text-[10px] text-gray-600 dark:text-gray-300 truncate flex-1 font-medium">
+                              <p className="text-[10px] text-gray-600 dark:text-gray-300 truncate flex-1 font-medium min-w-0">
                                 {result.siteName || new URL(result.url).hostname.replace('www.', '')}
                               </p>
                             </div>
 
                             {/* Title */}
-                            <h3 className="font-medium text-xs text-gray-900 dark:text-white line-clamp-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 leading-tight">
+                            <h3 className="font-medium text-xs text-gray-900 dark:text-white line-clamp-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 leading-tight break-words overflow-hidden">
                               {result.title}
                             </h3>
 
@@ -559,6 +571,8 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                     <MarkdownRenderer
                       content={getMessageContent(messages[messages.length - 1])}
                       sources={sources}
+                      enableTypewriter={isLoading}
+                      typewriterSpeed={20}
                     />
                   </div>
                 </div>
@@ -593,11 +607,11 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                     <button
                       key={index}
                       onClick={() => handleFollowUpClick(question)}
-                      className="w-full text-left p-2 bg-white dark:bg-zinc-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md group"
+                      className="w-full text-left p-3 sm:p-2 bg-white dark:bg-zinc-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md group transition-all duration-200"
                     >
                       <div className="flex items-center gap-2">
                         <Plus className="h-4 w-4 text-gray-400 group-hover:text-orange-500 flex-shrink-0" />
-                        <span className="text-sm text-gray-700 dark:text-gray-300 group-hover:text-orange-600 dark:group-hover:text-orange-400">
+                        <span className="text-sm sm:text-sm text-gray-700 dark:text-gray-300 group-hover:text-orange-600 dark:group-hover:text-orange-400 break-words leading-relaxed">
                           {question}
                         </span>
                       </div>
@@ -614,7 +628,7 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
 
         {/* Fixed input at bottom */}
         <div className="fixed lg:absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white dark:from-zinc-900 dark:via-zinc-900 to-transparent pt-4 pb-4 sm:pt-6 sm:pb-6 z-30">
-          <div className="max-w-2xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
             <form onSubmit={handleFormSubmit} ref={formRef}>
               <div className="relative group">
                 {/* Search Icon */}
@@ -634,7 +648,7 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                   }}
                   placeholder="Ask a follow-up question..."
                   className={`
-                  w-full pl-12 pr-16 py-4 text-base
+                  w-full pl-12 pr-16 py-4 text-base min-w-0
                   bg-white dark:bg-zinc-900/50
                   border border-gray-200/60 dark:border-zinc-700/50
                   rounded-2xl
@@ -676,10 +690,11 @@ export function ChatInterface({ messages, sources, newsResults, imageResults, fo
                       : 'bg-[#ff4d00] hover:bg-[#e64400] text-white shadow-lg shadow-[#ff4d00]/25 hover:shadow-xl hover:shadow-[#ff4d00]/30 active:scale-95'
                     }
                   group/button
+                  ${isLoading ? 'animate-pulse' : ''}
                 `}
                 >
                   {isLoading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin text-white" />
                   ) : (
                     <Send className="h-4 w-4 transition-transform duration-200 group-hover/button:translate-x-0.5" />
                   )}

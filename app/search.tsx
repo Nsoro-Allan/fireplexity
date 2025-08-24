@@ -14,7 +14,7 @@ export function SearchComponent({ handleSubmit, input, handleInputChange, isLoad
   const [isFocused, setIsFocused] = useState(false)
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto pt-12">
+    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto pt-8 sm:pt-12 px-4 sm:px-6 lg:px-0 w-full">
       <div className="relative group animate-fade-up [animation-duration:600ms] [animation-delay:200ms] [animation-fill-mode:forwards] opacity-0">
         {/* Search Icon */}
         <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
@@ -43,7 +43,7 @@ export function SearchComponent({ handleSubmit, input, handleInputChange, isLoad
           placeholder="Ask anything..."
           disabled={isLoading}
           className={`
-            w-full h-16 pl-12 pr-20 text-base
+            w-full h-14 sm:h-16 pl-12 pr-16 sm:pr-20 text-sm sm:text-base min-w-0
             bg-white/80 dark:bg-zinc-900/80
             border border-gray-200/60 dark:border-zinc-700/50
             rounded-2xl
@@ -86,20 +86,18 @@ export function SearchComponent({ handleSubmit, input, handleInputChange, isLoad
                 : 'bg-[#ff4d00] hover:bg-[#e64400] text-white shadow-lg shadow-[#ff4d00]/25 hover:shadow-xl hover:shadow-[#ff4d00]/30 active:scale-95'
               }
               group/button
+              ${isLoading ? 'animate-pulse' : ''}
             `}
           >
             {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin text-white" />
             ) : (
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/button:translate-x-0.5" />
             )}
           </button>
         </div>
 
-        {/* Subtle glow effect on focus */}
-        {isFocused && (
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#ff4d00]/5 to-transparent pointer-events-none" />
-        )}
+
       </div>
 
       {/* Search suggestions or shortcuts */}
@@ -112,7 +110,7 @@ export function SearchComponent({ handleSubmit, input, handleInputChange, isLoad
           </div>
 
           {/* Quick suggestion pills */}
-          <div className="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto px-4">
             {[
               "Latest tech news",
               "Stock market trends",

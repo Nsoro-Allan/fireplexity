@@ -1,16 +1,26 @@
 'use client'
 
-import React, { useMemo, useCallback } from 'react'
+import React, { useMemo, useCallback, useState, useEffect } from 'react'
 import Streamdown from 'streamdown'
 import { CitationTooltip } from './citation-tooltip-portal'
 import { SearchResult } from './types'
+import { TypewriterText } from '@/components/typewriter-text'
 
 interface MarkdownRendererProps {
   content: string
   sources?: SearchResult[]
+  enableTypewriter?: boolean
+  typewriterSpeed?: number
 }
 
-export function MarkdownRenderer({ content, sources }: MarkdownRendererProps) {
+export function MarkdownRenderer({
+  content,
+  sources,
+  enableTypewriter = false,
+  typewriterSpeed = 25
+}: MarkdownRendererProps) {
+  const [isTypewriterComplete, setIsTypewriterComplete] = useState(!enableTypewriter)
+  const [shouldShowTypewriter, setShouldShowTypewriter] = useState(enableTypewriter)
   // Process content to convert citations to clickable elements
   const processedContent = useMemo(() => {
     return content
@@ -40,7 +50,7 @@ export function MarkdownRenderer({ content, sources }: MarkdownRendererProps) {
         return part
       })
     }
-    
+
     if (Array.isArray(children)) {
       return children.map((child, i) => {
         if (typeof child === 'string') {
@@ -49,7 +59,7 @@ export function MarkdownRenderer({ content, sources }: MarkdownRendererProps) {
         return child
       })
     }
-    
+
     return children
   }, [])
 
@@ -93,6 +103,35 @@ export function MarkdownRenderer({ content, sources }: MarkdownRendererProps) {
       <em {...props}>{processChildren(children)}</em>
     ),
   }), [processChildren])
+
+  // Effect to handle typewriter state changes
+  useEffect(() => {
+    if (!enableTypewriter) {
+      setIsTypewriterComplete(true)
+      setShouldShowTypewriter(false)
+      return
+    }
+
+    setShouldShowTypewriter(true)
+    setIsTypewriterComplete(false)
+  }, [enableTypewriter, content])
+
+  // If typewriter is enabled and content is streaming, show typewriter
+  if (shouldShowTypewriter && !isTypewriterComplete && content) {
+    return (
+      <>
+        <div className="prose prose-gray max-w-none dark:prose-invert prose-sm sm:prose-base break-words overflow-hidden">
+          <TypewriterText
+            text={processedContent}
+            speed={typewriterSpeed}
+            onComplete={() => setIsTypewriterComplete(true)}
+            className="whitespace-pre-wrap"
+          />
+        </div>
+        {sources && sources.length > 0 && <CitationTooltip sources={sources} />}
+      </>
+    )
+  }
 
   return (
     <>

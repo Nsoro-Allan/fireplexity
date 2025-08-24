@@ -272,25 +272,25 @@ export default function FireplexityPage() {
       </header>
 
       {/* Hero section - matching other pages */}
-      <div className={`px-4 sm:px-6 lg:px-8 pt-16 pb-8 ${isChatActive ? 'hidden' : 'block'}`}>
+      <div className={`px-4 sm:px-6 lg:px-8 pt-8 sm:pt-16 pb-6 sm:pb-8 ${isChatActive ? 'hidden' : 'block'}`}>
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-[3rem] lg:text-[4rem] font-medium tracking-tight leading-tight">
+          <h1 className="text-[2.5rem] sm:text-[3rem] lg:text-[4rem] font-medium tracking-tight leading-tight">
             <span className="text-[#ff4d00] block">
               Fireplexity.
             </span>
-            <span className="text-[#262626] dark:text-white block text-[3rem] lg:text-[4rem] font-medium -mt-2">
+            <span className="text-[#262626] dark:text-white block text-[2.5rem] sm:text-[3rem] lg:text-[4rem] font-medium -mt-1 sm:-mt-2">
               Search & Scrape
             </span>
           </h1>
-          <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
+          <p className="mt-3 sm:mt-4 text-base sm:text-lg text-zinc-600 dark:text-zinc-400 px-4">
             Multi-source search with AI-powered insights, news, and images.
           </p>
         </div>
       </div>
 
       {/* Main content wrapper */}
-      <div className="flex-1 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto h-full">
+      <div className="flex-1 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="max-w-7xl mx-auto h-full overflow-hidden">
           {!isChatActive ? (
             <SearchComponent
               handleSubmit={handleSearch}
