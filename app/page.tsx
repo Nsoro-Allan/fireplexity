@@ -249,18 +249,21 @@ export default function FireplexityPage() {
       <header className="px-4 sm:px-6 lg:px-8 py-1 mt-2">
         <div className="max-w-[1216px] mx-auto flex items-center justify-between">
           <Link
-            href="https://firecrawl.dev"
+            href="#"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center"
           >
             <Image 
-              src="/firecrawl-wordmark.svg" 
+              src="/firecrawl-logo.svg" 
               alt="Firecrawl Logo" 
               width={90} 
               height={24}
               className="h-6 w-auto"
             />
+            <span className="ml-2 text-md font-medium text-[#262626] dark:text-white">
+              Fireplexity.
+            </span>
           </Link>
         </div>
       </header>
@@ -270,7 +273,7 @@ export default function FireplexityPage() {
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-[3rem] lg:text-[4rem] font-medium tracking-tight leading-tight">
             <span className="text-[#ff4d00] block">
-              Fireplexity v2
+              Fireplexity.
             </span>
             <span className="text-[#262626] dark:text-white block text-[3rem] lg:text-[4rem] font-medium -mt-2">
               Search & Scrape
