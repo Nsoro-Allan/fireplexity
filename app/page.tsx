@@ -249,13 +249,13 @@ export default function FireplexityPage() {
       <header className="px-4 sm:px-6 lg:px-8 py-1 mt-2">
         <div className="max-w-[1216px] mx-auto flex items-center justify-between">
           <Link
-            href="https://firecrawl.dev"
+            href="#"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center"
           >
             <Image 
-              src="/firecrawl-wordmark.svg" 
+              src="/firecrawl-logo.svg" 
               alt="Firecrawl Logo" 
               width={90} 
               height={24}
