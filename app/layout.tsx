@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Toaster } from 'sonner'
+import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Fireplexity.",
-  description: "Advanced search with AI-powered insights, news, images, and real-time information",
+  description:
+    "Advanced search with AI-powered insights, news, images, and real-time information",
 };
 
 export default function RootLayout({
@@ -13,10 +15,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="font-sans antialiased">
-        {children}
-        <Toaster position="bottom-right" />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster position="bottom-right" />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -73,7 +73,7 @@
   [class*="animate-"] {
     animation-fill-mode: both;
   }
-  
+
   /* Hide scrollbar for horizontal scroll areas */
   .scrollbar-hide {
     -ms-overflow-style: none; /* IE and Edge */
@@ -226,7 +226,7 @@
   }
 
   .scanner-line::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     right: 0;
@@ -268,16 +268,63 @@
     animation-duration: 40s; /* 20x slower than scanner - very slow scrolling */
   }
 
+  /* Blob animation for background orbs */
+  @keyframes blob {
+    0% {
+      transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+      transform: translate(0px, 0px) scale(1);
+    }
+  }
+
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+
   /* Animated cursor styles */
   @keyframes cursor-click {
-    0% { transform: scale(1); }
-    50% { transform: scale(0.8); }
-    100% { transform: scale(1); }
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.8);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   /* Selection pulse animation */
   @keyframes selection-pulse {
-    0%, 100% {
+    0%,
+    100% {
       border-color: rgba(251, 146, 60, 1);
       box-shadow: 0 0 0 0 rgba(251, 146, 60, 0.4);
     }
@@ -293,7 +340,8 @@
 
   /* Green selection pulse animation */
   @keyframes selection-pulse-green {
-    0%, 100% {
+    0%,
+    100% {
       border-color: rgba(34, 197, 94, 1);
       box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
       background-color: rgba(34, 197, 94, 0.05);
@@ -311,9 +359,17 @@
 
   /* Button press animation */
   @keyframes button-press {
-    0% { transform: scale(1); }
-    50% { transform: scale(0.8); background-color: rgb(220 38 38); }
-    100% { transform: scale(1); background-color: rgb(239 68 68); }
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.8);
+      background-color: rgb(220 38 38);
+    }
+    100% {
+      transform: scale(1);
+      background-color: rgb(239 68 68);
+    }
   }
 
   .animate-button-press {
@@ -355,7 +411,8 @@
 
   /* Pulse animation for grid */
   @keyframes grid-pulse {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 0.1;
     }
     50% {
@@ -412,12 +469,12 @@
 
   /* Hide scrollbar utility */
   .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 
   .scrollbar-hide::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari and Opera */
+    display: none; /* Chrome, Safari and Opera */
   }
 }
 
